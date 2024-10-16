@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>404-Linn Web</title>
+  </head>
+
+  <body style="cursor: none; background-color: #000">
+    <script>
+      // 通过ID获取元素
+      function yi_元素_获取_使用ID(elementId) {
+        return document.getElementById(elementId);
+      }
+
+      setTimeout(function () {
+        // 5000 ms
+        setTimeout(function () {
+          // 2000 ms
+          setTimeout(function () {
+            // 1000 ms
+            audio.play();
+            setTimeout(function () {
+              // 1000 ms
+              setTimeout(function () {
+                // 2000 ms
+                window.location.href = "/index.html";
+              }, 2000);
+            }, 1000);
+          }, 1000);
+        }, 2000);
+      }, 5000);
+    </script>
+  </body>
+</html>
