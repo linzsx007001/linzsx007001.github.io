@@ -1,0 +1,39 @@
+@charset "utf-8";
+/* CSS Document */
+html, div, img, span {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}/*使用群组选择器进行页面初始化*/
+body {
+	background: url(../images/bg.png);
+}/*设置页面背景*/
+.logo {
+	background: #930;
+	text-align: center;
+	color: #FFF;
+}/*设置背景颜色和文字居中*/
+.logo h1 {
+	font-size: 36px;
+	font-family: "微软雅黑";
+	padding: 10px 10px 20px 10px;
+}/*设置文字在容器内的垂直距离*/
+.content {
+	text-align: center;
+	padding: 100px 0 20px 0;
+}/*设置内容显示在合适的地方*/
+.content p {
+	margin: 20px 0px 30px 0px;
+	font-family: "微软雅黑";
+	color: #666;
+	text-align: center;
+	font-size: 30px;
+}/*设置段落文字距离其他元素的距离*/
+.content p span {
+	color: #930;
+}
+.content a {
+	background: #666666;
+	color: #FFF;
+	padding: 15px 20px;
+}/*设置超链接的外观*/
