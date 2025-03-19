@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turnstile Demo</title>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+  <form action="/submit-form" method="POST">
+    <!-- 其他表单字段 -->
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <!-- Turnstile Widget -->
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAABBmDL5EZbF2AG4R"></div>
+
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
