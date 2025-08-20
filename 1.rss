@@ -1,13 +1,13 @@
-rss version="2.0">
+<rss version="2.0">
 <channel>
 <title>XLuoFox.DSY 's Bloooog</title>
-<link>https://dsy-xiaoluo.github.io/</link>
+<link></link>
 <description>Linn Html</description>
 <ttl>114</ttl>
 <item>
 <title>测试</title>
 <link>https://linzsx007001.github.io/Error.html</link>
-<description>这是一条测试，如不出意外，打开此链接为空白页面</description>
+<description>这是一条测试，如不出意外，打开此链接为错误页面</description>
 <pubDate>Sat, 01 Jun 2024 17:38:35 GMT</pubDate>
 </item>
 <item>
