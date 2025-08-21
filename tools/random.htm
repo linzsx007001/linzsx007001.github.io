@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!--Powered By Wininit. Copyright (c) 2025--版权所有-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机生成器 - 生成随机数和字符串</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4a6cf7;
+            --secondary: #6f42c1;
+            --dark: #1d2144;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #198754;
+            --danger: #dc3545;
+            --warning: #ffc107;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f8ff 0%, #e2e8ff 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .result-container {
+            margin-top: 30px;
+        }
+        
+        .result-box {
+            background-color: var(--light);
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--dark);
+            word-break: break-all;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .history-container {
+            margin-top: 30px;
+        }
+        
+        .history-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-value {
+            font-weight: 500;
+        }
+        
+        .history-type {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-copy {
+            background-color: var(--success);
+        }
+        
+        .btn-clear {
+            background-color: var(--danger);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--gray);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: var(--success);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>随机生成器</h1>
+            <p>快速生成随机数、随机字母或混合字符串，可自定义大小写和长度</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="card">
+                <h2 class="card-title">生成选项</h2>
+                
+                <div class="form-group">
+                    <label for="type">生成类型</label>
+                    <select id="type" class="form-control">
+                        <option value="number">仅数字</option>
+                        <option value="letter">仅字母</option>
+                        <option value="mixed">数字和字母混合</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="length">生成长度</label>
+                    <input type="number" id="length" class="form-control" min="1" max="100" value="10">
+                </div>
+                
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="uppercase" checked>
+                        <label for="uppercase">大写字母</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="lowercase" checked>
+                        <label for="lowercase">小写字母</label>
+                    </div>
+                </div>
+                
+                <button id="generate-btn" class="btn btn-block">生成随机内容</button>
+                
+                <div class="result-container">
+                    <h3>生成结果</h3>
+                    <div class="result-box" id="result">
+                        点击上方按钮生成内容
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="copy-btn" class="btn btn-copy">复制结果</button>
+                        <button id="clear-btn" class="btn btn-clear">清除历史</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">生成历史</h2>
+                
+                <div class="history-container" id="history">
+                    <div class="history-item">
+                        <div>
+                            <div class="history-value">aB3x8Pq2Rt</div>
+                            <div class="history-type">字母和数字混合 • 10位</div>
+                        </div>
+                        <button class="btn">复制</button>
+                    </div>
+                    
+                    <div class="history-item">
+                        <div>
+                            <div class="history-value">739401</div>
+                            <div class="history-type">仅数字 • 6位</div>
+                        </div>
+                        <button class="btn">复制</button>
+                    </div>
+                    
+                    <div class="history-item">
+                        <div>
+                            <div class="history-value">KdFgHjMnOp</div>
+                            <div class="history-type">仅字母 • 10位</div>
+                        </div>
+                        <button class="btn">复制</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 随机生成器 - 一个简单实用的工具</p>
+        </footer>
+    </div>
+    
+    <div class="notification" id="notification">已复制到剪贴板！</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generate-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const resultBox = document.getElementById('result');
+            const historyContainer = document.getElementById('history');
+            const notification = document.getElementById('notification');
+            
+            // 初始化历史记录
+            let history = [];
+            
+            // 生成随机内容
+            generateBtn.addEventListener('click', function() {
+                const type = document.getElementById('type').value;
+                const length = parseInt(document.getElementById('length').value);
+                const uppercase = document.getElementById('uppercase').checked;
+                const lowercase = document.getElementById('lowercase').checked;
+                
+                // 验证输入
+                if (length < 1 || length > 100) {
+                    resultBox.textContent = '长度必须在1到100之间';
+                    return;
+                }
+                
+                if (type === 'letter' && !uppercase && !lowercase) {
+                    resultBox.textContent = '请至少选择一种字母类型';
+                    return;
+                }
+                
+                // 生成随机内容
+                let result = '';
+                let charset = '';
+                
+                if (type === 'number') {
+                    charset = '0123456789';
+                } else if (type === 'letter') {
+                    if (uppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    if (lowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
+                } else if (type === 'mixed') {
+                    charset = '0123456789';
+                    if (uppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    if (lowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
+                }
+                
+                for (let i = 0; i < length; i++) {
+                    const randomIndex = Math.floor(Math.random() * charset.length);
+                    result += charset[randomIndex];
+                }
+                
+                // 显示结果
+                resultBox.textContent = result;
+                
+                // 添加到历史记录
+                addToHistory(result, type, length);
+            });
+            
+            // 复制结果
+            copyBtn.addEventListener('click', function() {
+                if (resultBox.textContent === '点击上方按钮生成内容') {
+                    return;
+                }
+                
+                navigator.clipboard.writeText(resultBox.textContent)
+                    .then(() => {
+                        showNotification('已复制到剪贴板！');
+                    })
+                    .catch(err => {
+                        showNotification('复制失败: ' + err);
+                    });
+            });
+            
+            // 清除历史
+            clearBtn.addEventListener('click', function() {
+                history = [];
+                historyContainer.innerHTML = '<p>历史记录已清除</p>';
+            });
+            
+            // 添加到历史记录
+            function addToHistory(value, type, length) {
+                history.unshift({ value, type, length });
+                
+                // 只保留最近10条记录
+                if (history.length > 10) {
+                    history.pop();
+                }
+                
+                // 更新历史记录显示
+                updateHistoryDisplay();
+            }
+            
+            // 更新历史记录显示
+            function updateHistoryDisplay() {
+                historyContainer.innerHTML = '';
+                
+                history.forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    
+                    let typeText = '';
+                    if (item.type === 'number') typeText = '仅数字';
+                    else if (item.type === 'letter') typeText = '仅字母';
+                    else if (item.type === 'mixed') typeText = '数字和字母混合';
+                    
+                    historyItem.innerHTML = `
+                        <div>
+                            <div class="history-value">${item.value}</div>
+                            <div class="history-type">${typeText} • ${item.length}位</div>
+                        </div>
+                        <button class="btn">复制</button>
+                    `;
+                    
+                    // 添加复制功能
+                    const copyButton = historyItem.querySelector('.btn');
+                    copyButton.addEventListener('click', function() {
+                        navigator.clipboard.writeText(item.value)
+                            .then(() => {
+                                showNotification('已复制到剪贴板！');
+                            })
+                            .catch(err => {
+                                showNotification('复制失败: ' + err);
+                            });
+                    });
+                    
+                    historyContainer.appendChild(historyItem);
+                });
+            }
+            
+            // 显示通知
+            function showNotification(message) {
+                notification.textContent = message;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 2000);
+            }
+            
+        });
+    </script>
+</body>
+</html>
