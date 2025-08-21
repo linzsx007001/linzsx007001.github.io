@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的浏览器主页 - 必应搜索</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #0078d4; /* 必应主题色 */
+            --secondary: #006cbf;
+            --dark: #1d2144;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --background: #f5f8ff;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-color: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-theme {
+            --background: #1a1d2e;
+            --card-bg: rgba(37, 40, 60, 0.9);
+            --text-color: #f0f0f0;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+        
+        body {
+            background: var(--background);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+            background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 顶部导航 */
+        .top-nav {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .theme-toggle {
+            background: var(--card-bg);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+        
+        .theme-toggle i {
+            font-size: 1.2rem;
+            color: var(--text-color);
+        }
+        
+        /* 中央内容区域 */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 60px;
+        }
+        
+        .datetime {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .time {
+            font-size: 5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .date {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        /* 搜索框 */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 50px;
+        }
+        
+        .search-box {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 20px 25px;
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            outline: none;
+        }
+        
+        .search-engine {
+            padding: 20px 15px;
+            background: transparent;
+            border: none;
+            border-left: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .search-btn {
+            padding: 0 25px;
+            background: var(--primary);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-btn:hover {
+            background: var(--secondary);
+        }
+        
+        /* 快速链接 */
+        .quick-links {
+            width: 100%;
+            margin-top: 30px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 20px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        
+        .link-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .link-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .link-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            background: var(--primary);
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .link-name {
+            font-weight: 500;
+        }
+        
+        /* 底部信息 */
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 20px;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .time {
+                font-size: 3.5rem;
+            }
+            
+            .date {
+                font-size: 1.2rem;
+            }
+            
+            .links-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .time {
+                font-size: 2.8rem;
+            }
+            
+            .search-input {
+                padding: 15px 20px;
+            }
+            
+            .search-engine {
+                padding: 15px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <!-- 顶部导航 -->
+        <div class="top-nav">
+            <button class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        
+        <!-- 中央内容区域 -->
+        <div class="main-content">
+            <div class="datetime">
+                <div class="time" id="time">18:24:35</div>
+                <div class="date" id="date">2023年10月15日 星期日</div>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="使用必应搜索...">
+                    <select class="search-engine">
+                        <option selected>必应</option>
+                        <option>百度</option>
+                        <option>Google</option>
+                        <option>知乎</option>
+                        <option>GitHub</option>
+                    </select>
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="quick-links">
+                <h2 class="section-title">常用网站</h2>
+                <div class="links-grid">
+                    <div class="link-item">
+                        <div class="link-icon">
+                            <i class="fab fa-microsoft"></i>
+                        </div>
+                        <div class="link-name">Microsoft</div>
+                    </div>
+                    <div class="link-item">
+                        <div class="link-icon">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <div class="link-name">YouTube</div>
+                    </div>
+                    <div class="link-item">
+                        <div class="link-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <div class="link-name">GitHub</div>
+                    </div>
+                    <div class="link-item">
+                        <div class="link-icon">
+                            <i class="fab fa-twitter"></i>
+                        </div>
+                        <div class="link-name">Twitter</div>
+                    </div>
+                    <div class="link-item">
+                        <div class="link-icon">
+                            <i class="fab fa-spotify"></i>
+                        </div>
+                        <div class="link-name">Spotify</div>
+                    </div>
+                    <div class="link-item">
+                        <div class="link-icon">
+                            <i class="fab fa-netflix"></i>
+                        </div>
+                        <div class="link-name">Netflix</div>
+                    </div>
+                    <div class="link-item">
+                        <div class="link-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="link-name">新闻</div>
+                    </div>
+                    <div class="link-item">
+                        <div class="link-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="link-name">邮箱</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>我的浏览器主页 • 必应搜索 • 个性化您的浏览体验</p>
+        </footer>
+    </div>
+
+    <script>
+        // 更新时间函数
+        function updateDateTime() {
+            const now = new Date();
+            
+            // 更新时间
+            const timeElement = document.getElementById('time');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // 更新日期
+            const dateElement = document.getElementById('date');
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const weekday = weekdays[now.getDay()];
+            dateElement.textContent = `${year}年${month}月${day}日 ${weekday}`;
+        }
+        
+        // 初始调用
+        updateDateTime();
+        
+        // 每秒更新一次
+        setInterval(updateDateTime, 1000);
+        
+        // 主题切换功能
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            
+            if (document.body.classList.contains('dark-theme')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+        
+        // 搜索功能
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        
+        searchBtn.addEventListener('click', function() {
+            performSearch();
+        });
+        
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        function performSearch() {
+            const query = searchInput.value.trim();
+            const searchEngine = document.querySelector('.search-engine').value;
+            
+            if (query !== '') {
+                let searchUrl;
+                
+                switch(searchEngine) {
+                    case '必应':
+                        searchUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+                        break;
+                    case '百度':
+                        searchUrl = `https://www.baidu.com/s?wd=${encodeURIComponent(query)}`;
+                        break;
+                    case 'Google':
+                        searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                        break;
+                    case '知乎':
+                        searchUrl = `https://www.zhihu.com/search?q=${encodeURIComponent(query)}`;
+                        break;
+                    case 'GitHub':
+                        searchUrl = `https://github.com/search?q=${encodeURIComponent(query)}`;
+                        break;
+                    default:
+                        searchUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+                }
+                
+                window.open(searchUrl, '_blank');
+                searchInput.value = '';
+            }
+        }
+        
+        // 快速链接点击事件
+        const linkItems = document.querySelectorAll('.link-item');
+        
+        linkItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const siteName = this.querySelector('.link-name').textContent;
+                let siteUrl;
+                
+                switch(siteName) {
+                    case 'Microsoft':
+                        siteUrl = 'https://www.microsoft.com';
+                        break;
+                    case 'YouTube':
+                        siteUrl = 'https://www.youtube.com';
+                        break;
+                    case 'GitHub':
+                        siteUrl = 'https://www.github.com';
+                        break;
+                    case 'Twitter':
+                        siteUrl = 'https://www.twitter.com';
+                        break;
+                    case 'Spotify':
+                        siteUrl = 'https://www.spotify.com';
+                        break;
+                    case 'Netflix':
+                        siteUrl = 'https://www.netflix.com';
+                        break;
+                    case '新闻':
+                        siteUrl = 'https://www.msn.com/zh-cn/news';
+                        break;
+                    case '邮箱':
+                        siteUrl = 'https://outlook.live.com';
+                        break;
+                    default:
+                        siteUrl = 'https://www.bing.com';
+                }
+                
+                window.open(siteUrl, '_blank');
+            });
+        });
+    </script>
+</body>
+</html>

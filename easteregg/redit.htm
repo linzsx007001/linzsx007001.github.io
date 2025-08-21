@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="5;url=https://pan.huang1111.cn/s/E7OMQsb" />
-    <title>自动跳转页面</title>
-  </head>
-  <body>
-    <h1>正在跳转...</h1>
-    <p>如果没有自动跳转，请点击 <a href="https://pan.huang1111.cn/s/E7OMQsb">这里</a>。</p>
-  </body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Goto</title>
+    <script>
+        const redirectUrl = "https://pan.huang1111.cn/s/E7OMQsb";
+        let countdown = 3;
+        function updateCountdown() {
+            const countdownElement = document.getElementById("countdown");
+            if (countdown > 0) {
+                countdownElement.textContent = countdown;
+                countdown--;
+            } else {
+                window.location.href = redirectUrl;
+            }
+        }
+        window.onload = () => {
+            setInterval(updateCountdown, 1000);
+        };
+    </script>
+</head>
+<body>
+<h1>正在跳转...</h1>
+<p>
+    页面将在 <span id="countdown">5</span> 秒后跳转。如果没有自动跳转，请点击
+    <a href="https://pan.huang1111.cn/s/E7OMQsb" aria-label="跳转到目标链接">这里</a>。
+</p>
+</body>
 </html>
